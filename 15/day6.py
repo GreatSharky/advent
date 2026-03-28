@@ -47,8 +47,7 @@ def task1():
 def task2():
     def off(grid: np.ndarray, points: list[list[int,int],list[int,int]]):
         subgrid = grid[points[0][0]:points[1][0], points[0][1]:points[1][1]]
-        subgrid = np.where(subgrid > 0, subgrid - 1, 0)
-        grid[points[0][0]:points[1][0], points[0][1]:points[1][1]] = subgrid
+        subgrid[:] = np.clip(subgrid - 1, 0, None)
         return grid
 
     def on(grid: np.ndarray, points: list[list[int,int],list[int,int]]):
@@ -67,7 +66,7 @@ def task2():
     with open("inputs/input6.txt", "r") as file:
         instructions = file.readlines()
 
-    grid = np.zeros((1000,1000),np.uint8)
+    grid = np.zeros((1000,1000),np.int64)
 
     for instruction in instructions:
         instruction = instruction.rstrip()
@@ -86,7 +85,6 @@ def task2():
             start = data[2]
             end = data[-1]
             grid = off(grid, points(start,end))
-        debugsum = grid.sum()
 
     return grid.sum()
 
